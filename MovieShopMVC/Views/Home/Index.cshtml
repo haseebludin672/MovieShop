@@ -1,0 +1,14 @@
+﻿@model List<ApplicationCore.Models.MovieCardModel>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@foreach(var movie in Model)
+{// this Model is used to display data and list of movie is there
+    //if we want to get intalisences we can pot it on the top like using namespace
+   <div>
+       <a asp-controller="movies" asp-action="Details" asp-route-id= "@movie.Id">
+        <img src="@movie.PosterUrl" alt="movie.Title">
+       </a>
+   </div> 
+}
