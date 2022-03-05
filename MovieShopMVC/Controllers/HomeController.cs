@@ -1,24 +1,30 @@
-﻿using Infrastructure.Services;
+﻿using ApplicationCore.Contracts.Services;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using MovieShopMVC.Models;
 using System.Diagnostics;
+//model data passing it to the view
+//our controllers are very thin/lean
+//most of your logic should come from other dependencies , services, Interface
 
 namespace MovieShopMVC.Controllers
 {
+   
     public class HomeController : Controller
-
-
-    {[HttpGet]
+    {  
+    private readonly IMovieService _MovieService;
+    public HomeController(IMovieService movieService)
+    {
+            _MovieService = movieService;
+    }
+    
+        [HttpGet]
         public IActionResult Index()
         {
-            var movieService = new MovieService();
-            //model data passing it to the view
-            var movies = movieService.GetTop30GrossingMovies();
-            //our controllers are very thin/lean
-            //most of your logic should come from other dependencies , services
-            //Interfaces
-            //void method (int x, ImovieService service);
-            //method (20, movieservice);
+            // var movieService = new MovieService();
+
+            var movies = _MovieService.GetTop30GrossingMovies();
+
             return View(movies);
         }
 
