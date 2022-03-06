@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Contracts.Services;
+﻿using ApplicationCore.Contracts.Repositories;
+using ApplicationCore.Contracts.Services;
 using ApplicationCore.Models;
 using System;
 using System.Collections.Generic;
@@ -10,20 +11,33 @@ namespace Infrastructure.Services
 {
     public class MovieService : IMovieService
     {
-        public List<MovieCardModel> GetTop30GrossingMovies()
-        {// call movie repository which is gonna call database with the help of E.F
-            //now we dont have DB so use damy data
-            var movies = new List<MovieCardModel>()
-            {
-                new MovieCardModel { Id =1, PosterUrl ="https://image.tmdb.org/t/p/original//s3TBrRGB1iav7gFOCNx3H31MoES.jpg", Title ="Inception"},
-                new MovieCardModel { Id =2, PosterUrl ="https://image.tmdb.org/t/p/w342//gEU2QniE6E77NI6lCU6MxlNBvIx.jpg", Title ="Interstellar"},
-                new MovieCardModel { Id =3, PosterUrl ="https://image.tmdb.org/t/p/w342//qJ2tW6WMUDux911r6m7haRef0WH.jpg", Title =""},
-                new MovieCardModel { Id =4, PosterUrl ="", Title ="The Dark Knight"}
-               
-            };
-            return movies;
+        private readonly IMovieRepository _movieRepository;
 
+        public MovieService(IMovieRepository movieRepository)
+        {
+            _movieRepository = movieRepository;
         }
+        public List<MovieCardModel> GetTop30GrossingMovies()
+        {
+            var movies = _movieRepository.GetTop30RevenueMovies();
+            var mvoieCards= new List<MovieCardModel>();
+
+            //mapping entities data into the models data
+            foreach (var movie in movies)
+            {
+                mvoieCards.Add(new MovieCardModel
+                {
+                    Id = movie.Id,
+                    PosterUrl = movie.PosterUrl,
+                    Title = movie.Title,
+                });
+            }
+            return mvoieCards;
+              
+        }
+           
 
     }
+
 }
+
