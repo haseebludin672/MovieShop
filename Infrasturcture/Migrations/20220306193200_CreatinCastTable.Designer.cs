@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(MovieShopDbContext))]
-    partial class MovieShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220306193200_CreatinCastTable")]
+    partial class CreatinCastTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,24 +155,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("Movie", (string)null);
                 });
 
-            modelBuilder.Entity("ApplicationCore.Entities.MovieCast", b =>
-                {
-                    b.Property<int>("CastId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Character")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("CastId", "MovieId", "Character");
-
-                    b.HasIndex("MovieId");
-
-                    b.ToTable("MovieCast", (string)null);
-                });
-
             modelBuilder.Entity("ApplicationCore.Entities.MovieGenre", b =>
                 {
                     b.Property<int>("MovieId")
@@ -184,40 +168,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("GenreId");
 
                     b.ToTable("MovieGenre", (string)null);
-                });
-
-            modelBuilder.Entity("ApplicationCore.Entities.Purchase", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("PurchaseDateTime")
-                        .HasPrecision(7)
-                        .HasColumnType("datetime2(7)");
-
-                    b.Property<Guid>("PurchaseNumber")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MovieId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Purchase", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationCore.Entities.Trailer", b =>
@@ -248,88 +198,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("Trailer", (string)null);
                 });
 
-            modelBuilder.Entity("ApplicationCore.Entities.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("HashedPassword")
-                        .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
-
-                    b.Property<bool>("IsLocked")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastLoginDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<DateTime>("LocoutEndDAte")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
-
-                    b.Property<string>("Salt")
-                        .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("User", (string)null);
-                });
-
-            modelBuilder.Entity("ApplicationCore.Entities.MovieCast", b =>
-                {
-                    b.HasOne("ApplicationCore.Entities.Cast", "Cast")
-                        .WithMany("MovieCasts")
-                        .HasForeignKey("CastId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ApplicationCore.Entities.Movie", "Movie")
-                        .WithMany("MovieCasts")
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cast");
-
-                    b.Navigation("Movie");
-                });
-
             modelBuilder.Entity("ApplicationCore.Entities.MovieGenre", b =>
                 {
                     b.HasOne("ApplicationCore.Entities.Genre", "Genre")
@@ -349,25 +217,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Movie");
                 });
 
-            modelBuilder.Entity("ApplicationCore.Entities.Purchase", b =>
-                {
-                    b.HasOne("ApplicationCore.Entities.Movie", "Movie")
-                        .WithMany("Purchases")
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ApplicationCore.Entities.User", "User")
-                        .WithMany("Purchases")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Movie");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("ApplicationCore.Entities.Trailer", b =>
                 {
                     b.HasOne("ApplicationCore.Entities.Movie", "Movie")
@@ -379,11 +228,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Movie");
                 });
 
-            modelBuilder.Entity("ApplicationCore.Entities.Cast", b =>
-                {
-                    b.Navigation("MovieCasts");
-                });
-
             modelBuilder.Entity("ApplicationCore.Entities.Genre", b =>
                 {
                     b.Navigation("Movies");
@@ -393,16 +237,7 @@ namespace Infrastructure.Migrations
                 {
                     b.Navigation("Genres");
 
-                    b.Navigation("MovieCasts");
-
-                    b.Navigation("Purchases");
-
                     b.Navigation("Trailers");
-                });
-
-            modelBuilder.Entity("ApplicationCore.Entities.User", b =>
-                {
-                    b.Navigation("Purchases");
                 });
 #pragma warning restore 612, 618
         }

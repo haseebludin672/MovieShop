@@ -14,5 +14,14 @@ namespace MovieShopMVC.Controllers
         {
             return View();
         }
+        public IActionResult Details(int Id)
+        {// call mview service with details 
+            //then pass movie data to view
+
+            var movieDetails= _movieService.GetMovieDetails(Id);
+            return View(movieDetails);
+        }
+
+
     }
 }

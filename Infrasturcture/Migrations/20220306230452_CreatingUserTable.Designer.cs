@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(MovieShopDbContext))]
-    partial class MovieShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220306230452_CreatingUserTable")]
+    partial class CreatingUserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -186,40 +188,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("MovieGenre", (string)null);
                 });
 
-            modelBuilder.Entity("ApplicationCore.Entities.Purchase", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("PurchaseDateTime")
-                        .HasPrecision(7)
-                        .HasColumnType("datetime2(7)");
-
-                    b.Property<Guid>("PurchaseNumber")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MovieId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Purchase", (string)null);
-                });
-
             modelBuilder.Entity("ApplicationCore.Entities.Trailer", b =>
                 {
                     b.Property<int>("Id")
@@ -349,25 +317,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Movie");
                 });
 
-            modelBuilder.Entity("ApplicationCore.Entities.Purchase", b =>
-                {
-                    b.HasOne("ApplicationCore.Entities.Movie", "Movie")
-                        .WithMany("Purchases")
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ApplicationCore.Entities.User", "User")
-                        .WithMany("Purchases")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Movie");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("ApplicationCore.Entities.Trailer", b =>
                 {
                     b.HasOne("ApplicationCore.Entities.Movie", "Movie")
@@ -395,14 +344,7 @@ namespace Infrastructure.Migrations
 
                     b.Navigation("MovieCasts");
 
-                    b.Navigation("Purchases");
-
                     b.Navigation("Trailers");
-                });
-
-            modelBuilder.Entity("ApplicationCore.Entities.User", b =>
-                {
-                    b.Navigation("Purchases");
                 });
 #pragma warning restore 612, 618
         }
