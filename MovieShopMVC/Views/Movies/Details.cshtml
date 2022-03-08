@@ -1,7 +1,123 @@
-﻿@model ApplicationCore.Models.MovieDetailsModel
-<h2>Movie Details</h2>
+﻿@using Microsoft.EntityFrameworkCore
+@using ApplicationCore.Entities
+@model ApplicationCore.Models.MovieDetailsModel
 
-<h3> @Model.Title </h3>
-<h6>
-    @Model.Overview
-</h6>
+<style xmlns="http://www.w3.org/1999/html">
+    .movieHead{
+        background: linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), url("@Model.BackdropUrl");
+        background-size: cover;
+    }
+    .rounded-circle{
+        max-width: 40px ;
+        max-height: 40px;
+    }
+</style>
+<div class="container-fluid movieHead text-white bg-dark">
+    
+       
+   <div class="row">
+        <div class= "col-2"></div>
+        <div class="col-2">
+            <img src="@Model.PosterUrl"alt="@Model.Title" class="img-fluid"/>
+        </div>
+        <div class="col-1"></div>
+        <div class="col-4">
+            <h2>@Model.Title</h2>
+            <p>@Model.Tagline</p>
+            <h6>
+                @Model.RunTime m | @Model.ReleaseDate.Value.Year
+                @foreach (var Genre in @Model.Genres)
+                {
+                    <span class="badge bg-secondary">@Genre.Name</span>
+                }
+            </h6>
+            <h5><span class="badge bg-success">@Model.Rating 8.9</span></h5>
+            <h6>@Model.Overview</h6>
+        </div>
+        <div class="col-1"></div>
+        <div class="col-2">
+            <button type="button" data-bs-toggle="modal" data-bs-target="#reviewModal" class="btn btn-outline-light">REVIEW</button><br/>
+            <div class="modal fade text-black" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="reviewModalLabel">Review</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Leave a Review here:<br/>
+                            <form>
+                                <input id="reviewRange" name="reviewRange" type="range" value="0" min="0" max="10" oninput="this.nextElementSibling.value = this.value">
+                                <output>0</output>
+                                <textarea id="review" name="review" rows="4" cols="50"></textarea><br>
+                                <input id="submit" type="button" value="Submit">
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" data-bs-toggle="modal" data-bs-target="#purchaseModal" class="btn btn-light">BUY $@Model.Price</button>
+            <div class="modal fade text-black" id="purchaseModal" tabindex="-1" aria-labelledby="purchaseModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="purchaseModalLabel">Purchase Confirmation</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to purchase @Model.Title?
+                            <input type="button" id="submitPurchase" name="Submit" value="Purchase">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+      </div>
+    </div>
+</div>
+<br/>
+<div class="container-fluid movieDetails text-black bg-white">
+    <div class="row">
+        <div class="col-4 movieFacts">
+            <h5>MOVIE FACTS</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Release Date  <span class="badge bg-secondary">@Model.ReleaseDate.Value.ToString("MMMM dd, yyyy")</span></li>
+                <li class="list-group-item">Run Time  <span class="badge bg-secondary">@Model.RunTime m</span></li>
+                <li class="list-group-item">Box Office  <span class="badge bg-secondary">Placeholder</span></li>
+                <li class="list-group-item">Budget  <span class="badge bg-secondary">@Model.Budget.Value.ToString("C")</span></li>
+                <h6>TRAILERS</h6>
+                @foreach (var trailer in @Model.Trailers)
+                {
+                    <li class="list-group-item"><a href="@trailer.TrailerUrl" target="_blank">@trailer.Name</a></li>
+                }
+            </ul>
+        </div>
+        <div class="col-8 castTable">
+            <h5>CAST</h5>
+            <ul class="list-group list-group-flush">
+                @foreach (var cast in @Model.Casts)
+                {
+                    <li class="list-group-item">
+                        <div class="row">
+                        <div class="col-2 profile">
+                            <img src="@cast.ProfilePath" class="rounded-circle" alt="Facial Profile"/>
+                        </div>
+                        <div class="col-5 castName">
+                            @cast.Name
+                        </div>
+                        <div class="col-5 castCharacter">
+                            @cast.Character
+                        </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

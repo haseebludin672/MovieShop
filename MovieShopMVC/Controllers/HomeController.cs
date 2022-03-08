@@ -3,35 +3,36 @@ using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using MovieShopMVC.Models;
 using System.Diagnostics;
-//model data passing it to the view
-//our controllers are very thin/lean
-//most of your logic should come from other dependencies , services, Interface
 
 namespace MovieShopMVC.Controllers
 {
-   
     public class HomeController : Controller
-    {  
-    private readonly IMovieService _MovieService;
-    public HomeController(IMovieService movieService)
     {
-            _MovieService = movieService;
-    }
-    
-        [HttpGet]
-        public IActionResult Index()
+        private readonly IMovieService _movieService;
+        public HomeController(IMovieService movieService)
         {
-            // var movieService = new MovieService();
+            _movieService = movieService;
+        }
 
-            var movies = _MovieService.GetTop30GrossingMovies();
-
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var movies = await _movieService.GetTop30GrossingMovies();
             return View(movies);
         }
 
+        [HttpGet]
         public IActionResult Privacy()
         {
             return View();
         }
+
+        [HttpGet]
+        public IActionResult TopMovies()
+        {
+            return View();
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

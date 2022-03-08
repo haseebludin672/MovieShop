@@ -22,6 +22,7 @@ namespace ApplicationCore.Models
         public DateTime? ReleaseDate { get; set; }
         public int? RunTime { get; set; }
         public decimal? Price { get; set; }
+        public decimal? Rating { get; set; }
         // list of genre
         //list of trailers
         public List<GenreModel> Genres { get; set; }
