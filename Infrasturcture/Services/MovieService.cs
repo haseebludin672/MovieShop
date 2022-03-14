@@ -81,7 +81,7 @@ public class MovieService : IMovieService
         return movieDetails;
     }
 
-    public async Task<PagedResultSet<MovieCardModel>> GetMoviesByGenrePagination(int genreId, int pageSize = 30, int pageNumber = 1)
+    public async Task<PagedResultSet<MovieCardModel>> GetMoviesByGenrePagination(int genreId, int pageSize = 10, int pageNumber = 1)
     {
         var pagedMovies = await _movieRepository.GetMoviesByGenres(genreId, pageSize, pageNumber);
 

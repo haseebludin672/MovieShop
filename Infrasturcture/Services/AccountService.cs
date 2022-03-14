@@ -1,4 +1,4 @@
-﻿using ApplicationCore.Contracts.Repositories;
+﻿  using ApplicationCore.Contracts.Repositories;
 using ApplicationCore.Contracts.Services;
 using ApplicationCore.Entities;
 using ApplicationCore.Models;
@@ -57,7 +57,7 @@ namespace Infrastructure.Services
 
         }
 
-        public async Task<bool> ValidateUser(string email, string password)
+        public async Task<LogedInResponseModel> ValidateUser(string email, string password)
         {
             var user = await _userRepository.GetUserByEmail(email);
             if (user == null)
@@ -68,9 +68,17 @@ namespace Infrastructure.Services
             var hashedPassword = GetHashedPassword(password, user.Salt);
             if (hashedPassword == user.HashedPassword)
             {
-                return true;
+                return new LogedInResponseModel
+                {
+                    Email = user.Email,
+                    Id = user.Id,
+                    FirstName = user.FirstName,
+                    LastName= user.LastName,
+                    DateOfBirth= user.DateOfBirth.GetValueOrDefault(),
+
+                };
             }
-            return false;
+            return null;
 
         }
 

@@ -39,6 +39,7 @@ public class MovieRepository : EfRepository<Movie>, IMovieRepository
     {
         // get total movies count for that genre
         var totalMoviesCountByGenre = await _dbContext.MovieGenres.Where(m => m.GenreId == genreId).CountAsync();
+        //var prevPage = Math.Max(page - 1, firstPage);
 
         // get the actual movies from MovieGenre and Movie Table
         if (totalMoviesCountByGenre == 0)

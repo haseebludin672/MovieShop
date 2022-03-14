@@ -24,7 +24,9 @@ public class EfRepository<T> : IRepository<T> where T : class
 
     public async Task<T> Add(T entity)
     {
-        throw new NotImplementedException();
+        _dbContext.Set<T>().Add(entity);   
+        await _dbContext.SaveChangesAsync();
+        return entity;
     }
 
     public async Task<T> Update(T entity)

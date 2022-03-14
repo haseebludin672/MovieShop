@@ -4,7 +4,9 @@ using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Infrastructure.Repository;
 using Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using MovieShopMVC.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +16,11 @@ builder.Services.AddScoped<IMovieService, MovieService > ();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
-// if conteollername ==home then for IMovieService use MovieService
-// if conterllnam= movies then for IMovieService use MovieMockSevice
+builder.Services.AddScoped<ICurrentUser, CurrentUser>(); 
+
+builder.Services.AddHttpContextAccessor();
+
+
 
 
 
@@ -25,7 +30,14 @@ builder.Services.AddDbContext<MovieShopDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MovieShopDbConnection"));
 });
 
-
+//inject the authentication cookie information
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(Options =>
+    {
+        Options.Cookie.Name = "MovieShopAuthCookie";
+        Options.ExpireTimeSpan = TimeSpan.FromDays(1);
+        Options.LoginPath = "/Account/Login";
+    });
 
 var app = builder.Build();
 
@@ -42,6 +54,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
