@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using ApplicationCore.Contracts.Services;
+using ApplicationCore.Models;
+using Infrastructure.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieShopMVC.Services;
 using System.Security.Claims;
@@ -9,62 +12,56 @@ namespace MovieShopMVC.Controllers
     public class UserController : Controller
     {
         private readonly ICurrentUser _currentUser;
-        public UserController(ICurrentUser currentUser)
+        private readonly IUserService _userService;
+        public UserController(ICurrentUser currentUser, IUserService userService)
         {
             _currentUser = currentUser;
+            _userService = userService;
         }
-        //used a cleaner way of the commited code created Icurrent user + current user interface and class in MOVIEShopeMVC solutuion Explorer
-        //first thing is whether user is loged in or not
 
-        //var isAuthenticated = HttpContext.User.Identity.IsAuthenticated;
-        //if (isAuthenticated)
-        //{
-        //    //get the user id from cookies/claims
-        //    var userId =Convert.ToInt32(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
-        //    //send this UserId to UserService and get the movies user purchased from purchase table 
-
-
-
-        //send the user to databse to get all the movies user purchased  
-        // Cookie based authentication
-
-
-        //now using filter on our code to check if user is logged in or not a short code and easy
+     
         [HttpGet]
-       
         public async Task<IActionResult> Purchases()
         {
-                var UserId = _currentUser.UserId;
-            
-            return View();
+            var UserId = _currentUser.UserId;
+            var purchaseList = _userService.GetAllPurchasesForUser(UserId);
+            return View(purchaseList);
 
         }
 
         [HttpGet]
         public async Task<IActionResult> Favorites()
         {
-            return View();
+            var userId = _currentUser.UserId;
+            var favoritesList = _userService.GetAllFavoritesForUser(userId);
+            return View(favoritesList);
         }
 
         [HttpGet]
         public async Task<IActionResult> Reviews()
         {
+            var userId= _currentUser.UserId;
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> BuyMovie()
+        public async Task<IActionResult> BuyMovie(PurchaseRequestModel purchaseRequestM)
         {
+            var userId = _currentUser.UserId;
+            var purchased =  _userService.PurchaseMovie(purchaseRequestM, userId);
             return View();
         }
 
         public async Task<IActionResult> FavoriteMovie()
         {
+            var userId = _currentUser.UserId;
             return View();
         }
         public async Task<IActionResult> ReviewMovie()
         {
-            return View();
+          // var userId = _currentUser.UserId;
+           //var addreview =  _userService.AddMovieReview(reviewRequest);
+           return View();
         }
     }
 }

@@ -7,22 +7,29 @@ using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using MovieShopMVC.Services;
+using MovieShopMVC.Infra;
+using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddScoped<IMovieService, MovieService > ();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 builder.Services.AddScoped<IAccountService, AccountService>();
-builder.Services.AddScoped<ICurrentUser, CurrentUser>(); 
+
+builder.Services.AddScoped<ICurrentUser, CurrentUser>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<ICastService, CastService>();
+builder.Services.AddScoped<ICastRepository, CastRepository>();
 
 builder.Services.AddHttpContextAccessor();
-
-
-
-
 
 // inject the connection string to our DbContext by reading from appsettings.json file
 builder.Services.AddDbContext<MovieShopDbContext>(options =>
@@ -44,10 +51,13 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
+   
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseMovieShopeExceptionMiddleware();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

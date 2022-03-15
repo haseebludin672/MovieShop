@@ -17,6 +17,7 @@ namespace Infrastructure.Data
         }
         //stablishing the relation ship using DBset , 
         public DbSet<Genre> Genres { get; set; }
+        public DbSet<MovieGenre> MovieGenres { get; set; }
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Trailer> Trailers { get; set; }
         public DbSet<Cast> Casts { get; set; }
@@ -25,8 +26,9 @@ namespace Infrastructure.Data
         public DbSet<Purchase> Purchases { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<MovieGenre> MovieGenres { get; set;}
         public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<Favorite> Favorites { get; set; }
+       
 
 
 
@@ -34,17 +36,15 @@ namespace Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Movie>(ConfigureMovie);
+            modelBuilder.Entity<User>(ConfigureUser);
             modelBuilder.Entity<Trailer>(ConfigureTrailer);
             modelBuilder.Entity<MovieGenre>(ConfigureMovieGenre);
             modelBuilder.Entity<Cast>(ConfigureCast);
             modelBuilder.Entity<MovieCast>(ConfigureMovieCast);
-            modelBuilder.Entity<User>(ConfigureUser);
             modelBuilder.Entity<Purchase>(ConfigurePurchase);
             modelBuilder.Entity<Review>(ConfigureReview);
-            modelBuilder.Entity<Favorite>(ConfigureFavorite);
-            modelBuilder.Entity<Role>(ConfigureRole);
             modelBuilder.Entity<UserRole>(ConfigureUserRole);
-
+            modelBuilder.Entity<Role>(ConfigureRole);
         }
 
         private void ConfigureUserRole(EntityTypeBuilder<UserRole> modelbuilder)
