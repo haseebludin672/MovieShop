@@ -71,10 +71,11 @@ namespace Infrastructure.Services
                 return new LogedInResponseModel
                 {
                     Email = user.Email,
-                    Id = user.Id,
+                    Id = user.Id, 
                     FirstName = user.FirstName,
-                    LastName= user.LastName,
-                    DateOfBirth= user.DateOfBirth.GetValueOrDefault(),
+                    LastName = user.LastName,
+                    DateOfBirth = user.DateOfBirth.GetValueOrDefault(),
+                    Roles = user.UserRoles.Select(ur => new Rolemodel { Id = ur.UserId, Name = ur.Role.Name }).ToList()
 
                 };
             }
