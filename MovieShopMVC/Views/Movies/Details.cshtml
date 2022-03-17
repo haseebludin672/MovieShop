@@ -34,6 +34,7 @@
             <h5><span class="badge bg-success">@Model.Rating 8.9</span></h5>
             <h6>@Model.Overview</h6>
         </div>
+       
         <div class="col-1"></div>
         <div class="col-2">
             
@@ -64,8 +65,9 @@
                     </div>
                 </div>
             </div>
-            <button type="button" data-bs-toggle="modal" data-bs-target="#purchaseModal" class="btn btn-light">BUY $@Model.Price</button>
-            <div class="modal fade text-black" id="purchaseModal" tabindex="-1" aria-labelledby="purchaseModalLabel" aria-hidden="true">
+
+             <button type="button" data-bs-toggle="modal" data-bs-target="#purchaseModal" class="btn btn-light">BUY $@Model.Price</button>
+             <div class="modal fade text-black" id="purchaseModal" tabindex="-1" aria-labelledby="purchaseModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -81,10 +83,12 @@
                         </div>
                     </div>
                 </div>
-            </div>
-          </div>
-      </div>
+             </div>
+
+       </div>
+        
     </div>
+  </div>
 </div>
 <br/>
 <div class="container-fluid movieDetails text-black bg-white">

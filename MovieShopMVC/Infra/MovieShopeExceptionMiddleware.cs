@@ -67,6 +67,9 @@ namespace MovieShopMVC.Infra
              .WriteTo.Console()
              .CreateBootstrapLogger(); // <-- Change this line!
 
+            Log.Information(exceptionDetaisl.ExceptionMessage);
+            Log.Information(exceptionDetaisl.ExceptionStackTrace);
+            Log.Information(Convert.ToString(exceptionDetaisl.ExceptionType));
 
             //log the above object details to text or json file using serilog
             _logger.LogError(exceptionDetaisl.ExceptionMessage);
