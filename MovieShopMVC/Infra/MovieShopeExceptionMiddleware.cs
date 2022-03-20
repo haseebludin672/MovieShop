@@ -1,21 +1,16 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
-using Serilog.AspNetCore;
-using Serilog;
-using Microsoft.Extensions.Logging;
-using Serilog.Core;
-using Serilog.Events;
 
 namespace MovieShopMVC.Infra
 {
     // You may need to install the Microsoft.AspNetCore.Http.Abstractions package into your project
-    public class MovieShopeExceptionMiddleware
+    public class MovieShopExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<MovieShopeExceptionMiddleware> _logger;
+        private readonly ILogger<MovieShopExceptionMiddleware> _logger;
 
-        public MovieShopeExceptionMiddleware(RequestDelegate next, ILogger<MovieShopeExceptionMiddleware> logger)
+        public MovieShopExceptionMiddleware(RequestDelegate next, ILogger<MovieShopExceptionMiddleware> logger)
         {
             _next = next;
             _logger = logger;
@@ -23,11 +18,9 @@ namespace MovieShopMVC.Infra
 
         public async Task Invoke(HttpContext httpContext)
         {
-
-            //logic 
+            // logic 
             _logger.LogInformation("Inside exception Middleware");
-            //if there is no exception then call next middleware
-            //if there is exception then do the logging
+            // if there is no exception then call next middleware
 
             try
             {
@@ -35,18 +28,20 @@ namespace MovieShopMVC.Infra
             }
             catch (Exception ex)
             {
-                _logger?.LogError("Excetpin happend, handle here");
-                // if there is Exception then do the logging
+                _logger.LogError("Exception happened, hanled here");
 
-               await HandleExceptionLogic(httpContext, ex);
+                // if there is exception then do the logging
+                await HandleExceptionLogic(httpContext, ex);
             }
+
         }
-        
-        private async Task HandleExceptionLogic(HttpContext httpContext,Exception exception )
+
+        private async Task HandleExceptionLogic(HttpContext httpContext, Exception exception)
         {
-            _logger.LogError("Something went worng");
-            //get the exception details
-            var exceptionDetaisl = new
+            _logger.LogError("Something wenr wrong");
+
+            // get the exception details
+            var exceptionDetails = new
             {
                 ExceptionMessage = exception.Message,
                 ExceptionStackTrace = exception.StackTrace,
@@ -56,34 +51,23 @@ namespace MovieShopMVC.Infra
                 Path = httpContext.Request.Path,
                 HttpMethod = httpContext.Request.Method,
                 User = httpContext.User.Identity.IsAuthenticated ? httpContext.User.Identity.Name : null,
-  
+
             };
 
+            // log the above object details to text or json file using Serilog
 
-
-            Log.Logger = new LoggerConfiguration()
-             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-             .Enrich.FromLogContext()
-             .WriteTo.Console()
-             .CreateBootstrapLogger(); // <-- Change this line!
-
-            Log.Information(exceptionDetaisl.ExceptionMessage);
-            Log.Information(exceptionDetaisl.ExceptionStackTrace);
-            Log.Information(Convert.ToString(exceptionDetaisl.ExceptionType));
-
-            //log the above object details to text or json file using serilog
-            _logger.LogError(exceptionDetaisl.ExceptionMessage);
+            _logger.LogError(exceptionDetails.ExceptionMessage);
             httpContext.Response.Redirect("/home/error");
             await Task.CompletedTask;
         }
     }
 
     // Extension method used to add the middleware to the HTTP request pipeline.
-    public static class MovieShopeExceptionMiddlewareExtensions
+    public static class MovieShopExceptionMiddlewareExtensions
     {
-        public static IApplicationBuilder UseMovieShopeExceptionMiddleware(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseMovieShopExceptionMiddleware(this IApplicationBuilder builder)
         {
-            return builder.UseMiddleware<MovieShopeExceptionMiddleware>();
+            return builder.UseMiddleware<MovieShopExceptionMiddleware>();
         }
     }
 }

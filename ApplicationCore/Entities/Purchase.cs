@@ -9,7 +9,7 @@ namespace ApplicationCore.Entities
     public class Purchase
     {
         public int Id { get; set; }
-        public int? UserId { get; set; }
+        public int UserId { get; set; }
         public System.Guid? PurchaseNumbers { get; set; }
         public decimal TotalPrice { get; set; }
         public DateTime PurchaseDateTime { get; set; }

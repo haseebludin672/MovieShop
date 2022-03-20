@@ -19,49 +19,70 @@ namespace MovieShopMVC.Controllers
             _userService = userService;
         }
 
-     
         [HttpGet]
         public async Task<IActionResult> Purchases()
         {
-            var UserId = _currentUser.UserId;
-            var purchaseList = _userService.GetAllPurchasesForUser(UserId);
-            return View(purchaseList);
 
+            var userId = _currentUser.UserId;
+            var purchases = await _userService.GetAllPurchasesForUser(userId);
+            return View(purchases);
         }
 
         [HttpGet]
         public async Task<IActionResult> Favorites()
         {
             var userId = _currentUser.UserId;
-            var favoritesList = _userService.GetAllFavoritesForUser(userId);
-            return View(favoritesList);
+            var favorites = await _userService.GetAllFavoritesForUser(userId);
+            return View(favorites);
         }
 
         [HttpGet]
         public async Task<IActionResult> Reviews()
         {
-            var userId= _currentUser.UserId;
-            return View();
+            var userId = _currentUser.UserId;
+            var reviews = await _userService.GetAllReviewsByUser(userId);
+            return View(reviews);
         }
 
         [HttpPost]
-        public async Task<IActionResult> BuyMovie(PurchaseRequestModel purchaseRequestM)
+        public async Task<IActionResult> BuyMovie(PurchaseRequestModel model)
         {
             var userId = _currentUser.UserId;
-            var purchased =  _userService.PurchaseMovie(purchaseRequestM, userId);
-            return View();
+            var buy = await _userService.PurchaseMovie(model, userId);
+            return Redirect($"~/Movies/Details/{model.MovieId}");
         }
 
-        public async Task<IActionResult> FavoriteMovie()
+        [HttpPost]
+        public async Task<IActionResult> FavoriteMovie(int movieId)
         {
             var userId = _currentUser.UserId;
-            return View();
+            var favoriteMovie = await _userService.AddFavorite(new FavoriteRequestModel
+            {
+                UserId = userId,
+                MovieId = movieId
+            });
+            return Redirect($"~/Movies/Details/{movieId}");
         }
-        public async Task<IActionResult> ReviewMovie()
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UnfavoriteMovie(int id)
         {
-          // var userId = _currentUser.UserId;
-           //var addreview =  _userService.AddMovieReview(reviewRequest);
-           return View();
+            var userId = _currentUser.UserId;
+            var unfavoriteMovie = await _userService.RemoveFavorite(new FavoriteRequestModel
+            {
+                MovieId = id,
+                UserId = userId
+            });
+            return Redirect($"~/Movies/Details/{id}");
+        }
+        [HttpPost]
+        public async Task<IActionResult> ReviewMovie(ReviewRequestModel model)
+        {
+            var userId = _currentUser.UserId;
+            model.UserId = userId;
+            var review = await _userService.AddMovieReview(model);
+            return View($"~/Movies/Details/{model.MovieId}");
         }
     }
 }

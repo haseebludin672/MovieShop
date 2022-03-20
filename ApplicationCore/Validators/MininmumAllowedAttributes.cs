@@ -7,23 +7,19 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.Validators
 {
-    public class MininmumAllowedAttributes: ValidationAttribute
+    public class MinimumAllowedYearAttribute : ValidationAttribute
     {
-
-        public class MinimimAllowedYearAttribute : ValidationAttribute
+        protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
+            // Get the user entered value
+            var userEnteredYear = ((DateTime)value).Year;
+
+            if (userEnteredYear < 1900)
             {
-                // get the user entered value
-                var userEnetredYear = ((DateTime)value).Year;
-
-                if (userEnetredYear < 1900)
-                {
-                    return new ValidationResult("Year should be no less than 1900");
-                }
-                return ValidationResult.Success;
+                return new ValidationResult("Year should be no less than 1900");
             }
-        }
 
+            return ValidationResult.Success;
+        }
     }
 }

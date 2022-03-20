@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ApplicationCore.Entities;
+using ApplicationCore.Contracts.Repositories
+    ;
+namespace ApplicationCore.Contracts.Repositories;
 
-namespace ApplicationCore.Contracts.Repositories
+public interface IPurchaseRepository : IRepository<Purchase>
 {
-    public interface IPurchaseRepository
-    {
-    }
+    Task<Purchase> GetPurchaseByUser(int movieId, int userId);
+    Task<IEnumerable<Purchase>> GetAllPurchasesForUser(int id);
 }

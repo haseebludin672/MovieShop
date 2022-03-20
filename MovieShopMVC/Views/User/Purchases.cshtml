@@ -1,0 +1,63 @@
+﻿@model List<ApplicationCore.Models.PurchaseModel>
+
+@{
+    <div class="rounded">
+        <div class="container-fluid">
+            <div class="row">
+                @foreach (var purchase in Model)
+                {
+                    string target = "#expression" + purchase.Id;
+                    <div class="col-xl-2 col-sm-4 col-lg-3 col-6">
+                        <partial name="_MovieCard" model="purchase.Movie"/>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-secondary btn-lg" data-bs-toggle="modal" data-bs-target="@target">
+                            Purchases Details
+                        </button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="@target.Substring(1)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Purchase Details</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <img class="img-fluid" src="@purchase.Movie.PosterUrl" alt="@purchase.Movie.Title" />
+                                            </div>
+                                            <div class="col-9">
+                                                <div>
+                                                    <i class="fa fa-calendar"></i>
+                                                    <span>
+                                                        Purchased Date
+                                                    </span>
+                                                    <span class="badge rounded-pill bg-secondary">@purchase.PurchaseDateTime.Value.Month @purchase.PurchaseDateTime.Value.Day, @purchase.PurchaseDateTime.Value.Year</span>    
+                                                </div>
+                                                <hr/>
+                                                <div>
+                                                    <i class="fas fa-dollar-sign"></i>
+                                                    <span>
+                                                        Price
+                                                    </span>
+                                                    <span class="badge rounded-pill bg-secondary">$ @purchase.TotalPrice</span>    
+                                                </div>
+                                                                    
+                                                                    
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+    
+}
