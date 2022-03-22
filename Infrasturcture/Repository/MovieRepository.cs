@@ -32,6 +32,10 @@ public class MovieRepository : EfRepository<Movie>, IMovieRepository
             .Include(m => m.MovieCasts).ThenInclude(m => m.Cast)
             .Include(m => m.Trailers)
             .FirstOrDefaultAsync(m => m.Id == id);
+
+        var movieRating = await _dbContext.Reviews.Where(r => r.MovieId == id).DefaultIfEmpty()
+            .AverageAsync(r => r == null ? 0 : r.Rating);
+        movieDetails.Rating = movieRating;
         return movieDetails;
     }
 
